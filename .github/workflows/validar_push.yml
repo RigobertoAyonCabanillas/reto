@@ -1,4 +1,4 @@
-name: Validar nombre de rama
+name: Push Branch Validator
 
 on:
   push:
@@ -10,15 +10,15 @@ jobs:
   validar-nombre:
     runs-on: ubuntu-latest
     steps:
-      - name: Extraer nombre de la rama
-        run: |
-          echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+      - name: Mostrar nombre de la rama
+        run: echo "Rama actual: ${{ github.ref_name }}"
 
       - name: Validar convención de nombre
         run: |
-          echo "Nombre de rama detectado: $BRANCH_NAME"
-          if [[ "$BRANCH_NAME" =~ ^(feature|bugfix|hotfix)/.+ ]]; then
+          BRANCH="${{ github.ref_name }}"
+          echo "Validando rama: $BRANCH"
+          if echo "$BRANCH" | grep -Eq '^(feature|bugfix|hotfix)/.+'; then
             echo "✅ Nombre de rama válido."
           else
-            echo "❌ Error: El nombre de la rama no cumple con la convención requerida."
+            echo "::error::❌ Nombre de rama inválido. Usa feature/, bugfix/ o hotfix/"
             exit 1
