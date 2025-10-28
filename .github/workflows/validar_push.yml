@@ -1,0 +1,23 @@
+name: Validar nombre de rama
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - master
+
+jobs:
+  validar-nombre:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtener nombre de la rama
+        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+
+      - name: Validar convención de nombre
+        run: |
+          echo "Nombre de rama detectado: $BRANCH_NAME"
+          if [[ "$BRANCH_NAME" =~ ^(feature|bugfix|hotfix)/.+ ]]; then
+            echo "✅ Nombre de rama válido."
+          else
+            echo "❌ Error: El nombre de la rama no cumple con la convención requerida."
+            exit 1
