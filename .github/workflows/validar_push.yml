@@ -10,8 +10,9 @@ jobs:
   validar-nombre:
     runs-on: ubuntu-latest
     steps:
-      - name: Obtener nombre de la rama
-        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+      - name: Extraer nombre de la rama
+        run: |
+          echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
 
       - name: Validar convención de nombre
         run: |
